@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>CORS Test</title>
+</head>
+<body>
+    <h1>CORS Test for Quiz API</h1>
+    <button onclick="testQuestionAPI()">Test Question API</button>
+    <button onclick="testQuestionAPIWithAuth()">Test Question API with Auth</button>
+    <div id="results"></div>
+
+    <script>
+        const resultsDiv = document.getElementById('results');
+
+        async function testQuestionAPI() {
+            resultsDiv.innerHTML = '<p>Testing Question API without auth...</p>';
+            try {
+                const response = await fetch('http://localhost:8080/question/allQuestions');
+                const data = await response.json();
+                resultsDiv.innerHTML = `<p>✅ Success! Found ${data.length} questions</p>`;
+                console.log('Questions:', data);
+            } catch (error) {
+                resultsDiv.innerHTML = `<p>❌ Error: ${error.message}</p>`;
+                console.error('Error:', error);
+            }
+        }
+
+        async function testQuestionAPIWithAuth() {
+            resultsDiv.innerHTML = '<p>Testing Question API with auth headers...</p>';
+            try {
+                const response = await fetch('http://localhost:8080/question/allQuestions', {
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': 'Bearer fake-token'
+                    }
+                });
+                const data = await response.json();
+                resultsDiv.innerHTML = `<p>✅ Success! Found ${data.length} questions</p>`;
+                console.log('Questions:', data);
+            } catch (error) {
+                resultsDiv.innerHTML = `<p>❌ Error: ${error.message}</p>`;
+                console.error('Error:', error);
+            }
+        }
+    </script>
+</body>
+</html>
